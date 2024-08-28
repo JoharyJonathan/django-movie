@@ -1,0 +1,17 @@
+{% extends "authenticate/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-3">Profile of {{ user.username }}</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Date of Account Creation:</strong> {{ user.date_joined }}</p>
+        </div>
+    </div>
+    
+    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Return to Welcome Page</a>
+</div>
+{% endblock content %}

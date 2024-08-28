@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mon Site{% endblock %}</title>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css'>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.4/css/tether.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css'>
+
+    <link rel='stylesheet' href="{% static 'authe/css/style.css' %}">
+    <link rel='stylesheet' href="{% static 'authe/css/demo.css' %}">
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-light bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand"></a>
+            <form class="d-flex input-group w-auto" action="#" method="get">
+                <input
+                  type="search"
+                  name="q"
+                  class="form-control rounded my-2"
+                  placeholder="Search"
+                  aria-label="Search"
+                  aria-describedby="search-addon"
+                />
+                <span class="input-group-text border-0" id="search-addon">
+                  <i class="fas fa-search"></i>
+                </span>
+            </form>
+        </div>
+    </nav>
+  </header>
+
+    <main>
+      <div id="wrapper">
+        <div class="overlay"></div>
+         
+             <!-- Sidebar -->
+         <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
+          <ul class="nav sidebar-nav">
+            <div class="sidebar-header">
+            <div class="sidebar-brand">
+              <a href="#">Brand</a></div></div>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li>
+                {% if user.is_authenticated %}
+                    <a href="#">InBox</a>
+                {% else %}
+                    <a href="{% url 'login' %}">InBox</a>
+                {% endif %}
+            </li>
+            <li>
+                {% if user.is_authenticated %}
+                    <a href="#">Spams</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Spams</a>
+                {% endif %}
+            </li>
+            <li>
+                {% if user.is_authenticated %}
+                    <a href="#">Sents</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Sents</a>
+                {% endif %}
+            </li>
+            <li>
+                {% if user.is_authenticated %}
+                    <a href="#">New message</a>
+                {% else %}
+                    <a href="{% url 'login' %}">New message</a>
+                {% endif %}
+            </li>
+            {% if user.is_authenticated %}
+            <li class="dropdown">
+              <a href="#works" class="dropdown-toggle"  data-toggle="dropdown">User <span class="caret"></span></a>
+            <ul class="dropdown-menu animated fadeInLeft" role="menu">
+             <div class="dropdown-header">User Options</div>
+             <li><a href="{% url 'profile' %}">View Profile</a></li>
+             <li>
+              <a href="{% url 'logout' %}">
+                <button type="submit" class="btn btn-text" style="color: white">Log Out</button>
+              </a>
+            </li>
+             </ul>
+             </li>
+            {% else %}
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'login' %}">Sign In</a></li>
+            {% endif %}
+           <li><a href="#">Re-train model</a></li>
+           </ul>
+       </nav>
+             <!-- /#sidebar-wrapper -->
+     
+             <!-- Page Content -->
+             <div id="page-content-wrapper">
+                 <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+                     <span class="hamb-top"></span>
+               <span class="hamb-middle"></span>
+             <span class="hamb-bottom"></span>
+                 </button>
+                 <div class="container">
+                     <div class="row">
+                         <div class="col-lg-8 col-lg-offset-2" style="margin: auto; background: #fff">
+                             
+                          {% block content %}
+                          
+                          {% endblock content %}
+                             
+                              
+       <footer class="credit">Author: Darryl - Distributed By: <a title="Awesome web design code & scripts" href="https://www.codehim.com?source=demo-page" target="_blank">CodeHim</a></footer>
+                             
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <!-- /#page-content-wrapper -->
+     
+         </div>
+    </main>
+
+    <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.4/js/tether.min.js'></script>
+
+    <script src="{% static 'authe/js/script.js' %}"></script>
+    {% bootstrap_javascript %}
+</body>
+</html>
