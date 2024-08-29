@@ -21,5 +21,6 @@ from authe.views import home_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("auth/", include('authe.urls')),
+    path('accounts/', include('allauth.urls')),
     path('', home_view, name='home'),
 ]
