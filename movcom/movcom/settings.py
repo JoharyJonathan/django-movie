@@ -150,3 +150,8 @@ AUTHENTICATION_BACKENDS = (
 # Paramètres de compte
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = True
+
+from decouple import config
+
+# Chargez la clé secrète depuis le fichier .env
+ADMIN_SECRET_KEY = config('ADMIN_SECRET_KEY')

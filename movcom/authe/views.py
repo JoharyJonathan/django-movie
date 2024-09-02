@@ -1,22 +1,37 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import SignUpForm
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import AdminSignUpForm
+from django.conf import settings
 
-def signup_view(request):
+def admin_signup_view(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = AdminSignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('home')
+            secret_key = form.cleaned_data.get('secret_key')
+            if secret_key == settings.ADMIN_SECRET_KEY:
+                user = form.save()
+                username = form.cleaned_data.get('username')
+                raw_password = form.cleaned_data.get('password1')
+                user = authenticate(username=username, password=raw_password)
+                login(request, user)
+                return redirect('home')
+            else:
+                form.add_error('secret_key', 'Clé secrète invalide.')
     else:
-        form = SignUpForm()
+        form = AdminSignUpForm()
     return render(request, 'authenticate/signup.html', {'form': form})
+
+def home_view(request):
+    if request.user.is_authenticated:
+        # Logique si l'utilisateur est connecté
+        message = f"Bienvenue, {request.user.username}!"
+    else:
+        # Logique si l'utilisateur n'est pas connecté
+        message = "Bienvenue, visiteur. Veuillez vous connecter."
+        
+    return render(request, 'authenticate/home.html', {'message': message})
 
 def login_view(request):
     if request.method == 'POST':
@@ -35,16 +50,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
-
-def home_view(request):
-    if request.user.is_authenticated:
-        # Logique si l'utilisateur est connecté
-        message = f"Bienvenue, {request.user.username}!"
-    else:
-        # Logique si l'utilisateur n'est pas connecté
-        message = "Bienvenue, visiteur. Veuillez vous connecter."
-        
-    return render(request, 'authenticate/home.html', {'message': message})
 
 @login_required
 def profile_view(request):

@@ -12,7 +12,7 @@
                 <button type="submit" class="btn btn-danger">Log Out</button>
             </form>            
         {% else %}
-            <p>Welcome, visitor. Please <a href="{% url 'login' %}">Log in</a> or <a href="{% url 'signup' %}">Sign Up</a>.</p>
+            <p>Welcome, visitor. Please <a href="{% url 'login' %}">Log in</a> or <a href="{% url 'adminsign' %}">Sign Up</a>.</p>
         {% endif %}
     </div>
 {% endblock content %}
