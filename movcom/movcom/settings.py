@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.facebook',
     'django_bootstrap5',
-    'authe'
+    'authe',
+    'movies'
 ]
 
 MIDDLEWARE = [
