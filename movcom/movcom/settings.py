@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'django_bootstrap5',
     'authe',
+    'admins',
     'movies',
     'recommendations'
 ]

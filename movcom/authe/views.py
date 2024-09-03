@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import AdminSignUpForm
 from django.conf import settings
+from admins.utils import create_admin
 
 def admin_signup_view(request):
     if request.method == 'POST':
@@ -11,11 +12,19 @@ def admin_signup_view(request):
         if form.is_valid():
             secret_key = form.cleaned_data.get('secret_key')
             if secret_key == settings.ADMIN_SECRET_KEY:
-                user = form.save()
+                # Récupérer les données du formulaire
                 username = form.cleaned_data.get('username')
                 raw_password = form.cleaned_data.get('password1')
+                email = form.cleaned_data.get('email')
+                role_name = form.cleaned_data.get('role')  # Assuming there's a role field
+
+                # Créer l'utilisateur admin via la fonction create_admin
+                create_admin(username, raw_password, email, role_name)
+
+                # Authentifier et connecter l'utilisateur
                 user = authenticate(username=username, password=raw_password)
                 login(request, user)
+                
                 return redirect('home')
             else:
                 form.add_error('secret_key', 'Clé secrète invalide.')
