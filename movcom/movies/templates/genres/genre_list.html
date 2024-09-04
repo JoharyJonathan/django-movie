@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Genres</h1>
+    <a href="{% url 'genre_create' %}">Add New Genre</a>
+    <ul>
+        {% for genre in genres %}
+            <li>
+                {{ genre.name }} - {{ genre.description }}
+                <a href="{% url 'genre_update' genre.pk %}">Edit</a>
+                <a href="{% url 'genre_delete' genre.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

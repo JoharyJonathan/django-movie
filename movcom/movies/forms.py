@@ -1,5 +1,5 @@
 from django import forms
-from .models import Actor
+from .models import Actor, Genre
 
 class ActorForm(forms.ModelForm):
     class Meta:
@@ -8,3 +8,8 @@ class ActorForm(forms.ModelForm):
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
+        
+class GenreForm(forms.ModelForm):
+    class Meta:
+        model = Genre
+        fields = ['name', 'description']
