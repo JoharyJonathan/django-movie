@@ -1,6 +1,10 @@
+import os
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Actor, Genre
-from .forms import ActorForm, GenreForm
+from .models import Actor, Genre, Movie
+from .forms import ActorForm, GenreForm, MovieForm
+from django.utils import timezone
+from django.conf import settings
+
 
 # Create your views here.
 def actor_create(request):
@@ -73,3 +77,74 @@ def genre_delete(request, pk):
         return redirect('genre_list')
     
     return render(request, 'genres/genre_confirm_delete.html', {'genre': genre})
+
+def save_uploaded_image(file):
+    # destination folder
+    upload_dir = os.path.join(settings.MEDIA_ROOT, 'movie_posters')
+    os.makedirs(upload_dir, exist_ok=True)
+    
+    # create the file with date and time
+    filename, ext = os.path.splitext(file.name)
+    new_filename = f"{timezone.now().strftime('%Y%m%d%H%M%S')}_{filename}{ext}"
+    
+    # path for save the file
+    file_path = os.path.join(upload_dir, new_filename)
+    
+    # Save the file in disk storage
+    with open(file_path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+            
+    # return the stored path in poster_url field
+    return f"movies_posters/{new_filename}"
+
+def movie_create(request):
+    if request.method == 'POST':
+        form = MovieForm(request.POST)
+        if form.is_valid():
+            movie = form.save(commit=False)
+            
+            # Check if a file is uploaded
+            if 'poster' in request.FILES:
+                poster_file = request.FILES['poster']
+                # Save file and get the path
+                movie.poster_url = save_uploaded_image(poster_file)
+                
+            movie.save()
+            return redirect('movie_list')
+    else:
+        form = MovieForm()
+        
+    return render(request, 'movies/movie_form.html', {'form': form})
+
+
+def movie_list(request):
+    movies = Movie.objects.all()
+    return render(request, 'movies/movie_list.html', {'movies': movies})
+
+def movie_update(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+    if request.method == 'POST':
+        form = MovieForm(request.POST, instance=movie)
+        if form.is_valid():
+            movie = form.save(commit=False)
+            
+            # Check if another file was uploaded
+            if 'poster' in request.FILES:
+                poster_file = request.FILES['poster']
+                movie.poster_url = save_uploaded_image(poster_file)
+            
+            movie.save()
+            return redirect('movie_list')
+    else:
+        form = MovieForm(instance=movie)
+        
+    return render(request, 'movies/movie_form.html', {'form': form})
+
+def movie_delete(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+    if request.method == 'POST':
+        movie.delete()
+        return redirect('movie_list')
+    
+    return render(request, 'movies/movie_confirm_delete.html', {'movie': movie})

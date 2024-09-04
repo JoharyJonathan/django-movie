@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ movie.id|default:"Create" }} Movie</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p>
+        <label for="poster">Upload Poster:</label>
+        <input type="file" name="poster" id="poster">
+    </p>
+    <button type="submit">Save</button>
+</form>
+{% endblock content %}
