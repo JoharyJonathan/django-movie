@@ -1,0 +1,14 @@
+{% extends 'actors/base.html' %}
+
+{% block content %}
+  <h2>Actors</h2>
+  <a href="{% url 'actor_create' %}">Add New Actor</a>
+  <ul>
+    {% for actor in actors %}
+      <li>{{ actor.first_name }} {{ actor.last_name }} 
+          <a href="{% url 'actor_update' actor.pk %}">Edit</a> | 
+          <a href="{% url 'actor_delete' actor.pk %}">Delete</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
