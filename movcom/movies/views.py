@@ -166,3 +166,13 @@ def movie_delete(request, pk):
         return redirect('movie_list')
     
     return render(request, 'movies/movie_confirm_delete.html', {'movie': movie})
+
+def movie(request):
+    movies = Movie.objects.all()
+    
+    return render(request, 'movies/movie.html', {'movies': movies})
+
+def movie_detail(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+    
+    return render(request, 'movies/movie_detail.html', {'movie': movie})
