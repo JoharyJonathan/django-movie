@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Actor, Genre, Movie
+from .models import Actor, Genre, Movie, MovieGenres
 from .forms import ActorForm, GenreForm, MovieForm
 from django.utils import timezone
 from django.conf import settings
@@ -124,22 +124,40 @@ def movie_list(request):
 
 def movie_update(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
+    
     if request.method == 'POST':
         form = MovieForm(request.POST, instance=movie)
+        
         if form.is_valid():
             movie = form.save(commit=False)
             
-            # Check if another file was uploaded
+            # Vérifiez si une nouvelle image a été téléchargée
             if 'poster' in request.FILES:
                 poster_file = request.FILES['poster']
                 movie.poster_url = save_uploaded_image(poster_file)
             
-            movie.save()
-            return redirect('movie_list')
-    else:
-        form = MovieForm(instance=movie)
+            movie.save()  # Sauvegarder le film
+
+            # Gestion des genres
+            # Supprimer les anciennes associations
+            MovieGenres.objects.filter(movie=movie).delete()
+
+            # Associer les nouveaux genres
+            genres = form.cleaned_data.get('genres')
+            if genres:
+                for genre in genres:
+                    MovieGenres.objects.create(movie=movie, genre=genre)  # Associer chaque genre sélectionné au film
+            
+            return redirect('movie_list')  # Rediriger vers la liste des films après la mise à jour
         
-    return render(request, 'movies/movie_form.html', {'form': form})
+    else:
+        # Préremplir le formulaire avec les genres actuels du film
+        initial_data = {
+            'genres': movie.movie_genres.values_list('genre', flat=True)  # Pré-remplir avec les genres actuels
+        }
+        form = MovieForm(instance=movie, initial=initial_data)
+    
+    return render(request, 'movies/movie_form.html', {'form': form, 'movie': movie})
 
 def movie_delete(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
