@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import AdminSignUpForm
+from .forms import AdminSignUpForm, ProfileUpdateForm
 from django.conf import settings
 from admins.utils import create_admin
 
@@ -64,3 +64,15 @@ def logout_view(request):
 def profile_view(request):
     user = request.user
     return render(request, 'authenticate/profile.html', {'user': user})
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileUpdateForm(instance=request.user)
+        
+    return render(request, 'authenticate/update_profile.html', {'form': form})

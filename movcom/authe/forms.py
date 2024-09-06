@@ -1,6 +1,10 @@
+import os
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from .models import CustomUser
+from django.conf import settings
 
 class AdminSignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -17,4 +21,50 @@ class AdminSignUpForm(UserCreationForm):
         user.is_staff = True
         if commit:
             user.save()
+        return user
+    
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'profile_image']
+        
+class ProfileUpdateForm(UserChangeForm):
+    profile_image_file = forms.FileField(required=False)
+    password = forms.CharField(
+        label='New Password', 
+        widget=forms.PasswordInput, 
+        required=False
+    )
+
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email', 'password', 'profile_image_file']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        # if image save image
+        if 'profile_image_file' in self.files:
+            image_file = self.files['profile_image_file']
+            new_filename = f"{user.username}_{image_file.name}"
+            save_path = os.path.join(settings.MEDIA_ROOT, 'profile_images', new_filename)
+
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+            # Save image file
+            with open(save_path, 'wb+') as destination:
+                for chunk in image_file.chunks():
+                    destination.write(chunk)
+
+            # update first_name fields with the file path
+            user.first_name = os.path.join('profile_images', new_filename)
+
+        # if password field is not empty, update password
+        password = self.cleaned_data.get('password')
+        if password and password.split():
+            user.set_password(password)
+
+        if commit:
+            user.save()
+
         return user
