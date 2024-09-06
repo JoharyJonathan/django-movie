@@ -5,14 +5,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from .models import CustomUser
 from django.conf import settings
+from admins.models import Role
 
 class AdminSignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
     secret_key = forms.CharField(required=True, widget=forms.PasswordInput)
+    role = forms.ModelChoiceField(queryset=Role.objects.all(), required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'secret_key')
+        fields = ('username', 'email', 'password1', 'password2', 'secret_key', 'role')
 
     def save(self, commit=True):
         user = super(AdminSignUpForm, self).save(commit=False)
