@@ -1,5 +1,12 @@
-{% extends "base.html" %}
+{% extends "uses.html" %}
 
 {% block content %}
-    <h1>Details of {{ movie.title }}</h1>
+    <section class="container">
+        <br><br>
+        <h1>Details of {{ movie.title }}</h1>
+        <br>
+        <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+        <h2>Description :</h2>
+        <p>{{ movie.description }}</p>
+    </section>
 {% endblock content %}

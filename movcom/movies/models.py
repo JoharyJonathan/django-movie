@@ -22,7 +22,7 @@ class Movie(models.Model):
     release_year = models.IntegerField()
     director = models.CharField(max_length=255)
     actors = models.ManyToManyField(Actor, related_name='movies')
-    poster_url = models.CharField(max_length=255, blank=True, null=True)
+    poster = models.ImageField(upload_to='movie_posters/', blank=True, null=True)
     rating = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -37,5 +37,5 @@ class MovieGenres(models.Model):
     class Meta:
         unique_together = ('movie', 'genre')
         
-    def __str__(self) -> str:
+    def __str__(self):
         return f"{self.movie.title} - {self.genre.name}"

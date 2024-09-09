@@ -158,3 +158,10 @@ from decouple import config
 
 # Chargez la clé secrète depuis le fichier .env
 ADMIN_SECRET_KEY = config('ADMIN_SECRET_KEY')
+
+# file configuration
+import os
+
+# Add media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

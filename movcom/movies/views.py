@@ -100,21 +100,12 @@ def save_uploaded_image(file):
 
 def movie_create(request):
     if request.method == 'POST':
-        form = MovieForm(request.POST)
+        form = MovieForm(request.POST, request.FILES)
         if form.is_valid():
-            movie = form.save(commit=False)
-            
-            # Check if a file is uploaded
-            if 'poster' in request.FILES:
-                poster_file = request.FILES['poster']
-                # Save file and get the path
-                movie.poster_url = save_uploaded_image(poster_file)
-                
-            movie.save()
-            return redirect('movie_list')
+            form.save()
+            return redirect('movie_list')  # Redirige vers la page appropriée
     else:
         form = MovieForm()
-        
     return render(request, 'movies/movie_form.html', {'form': form})
 
 
@@ -126,7 +117,7 @@ def movie_update(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     
     if request.method == 'POST':
-        form = MovieForm(request.POST, instance=movie)
+        form = MovieForm(request.POST, request.FILES, instance=movie)
         
         if form.is_valid():
             movie = form.save(commit=False)
@@ -172,7 +163,10 @@ def movie(request):
     
     return render(request, 'movies/movie.html', {'movies': movies})
 
-def movie_detail(request, pk):
-    movie = get_object_or_404(Movie, pk=pk)
+def movie_detail(request, id):
+    movie = get_object_or_404(Movie, pk=id)
     
     return render(request, 'movies/movie_detail.html', {'movie': movie})
+
+def test(request):
+    return render(request, 'uses.html')

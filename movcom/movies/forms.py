@@ -19,25 +19,20 @@ class MovieForm(forms.ModelForm):
     genres = forms.ModelMultipleChoiceField(
         queryset=Genre.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        required=True
+        required=False
     )
 
     class Meta:
         model = Movie
-        fields = ['title', 'description', 'release_year', 'director', 'actors', 'rating']
+        fields = ['title', 'description', 'release_year', 'director', 'actors', 'poster', 'rating']
 
     def save(self, commit=True):
-        # Sauvegarder l'instance Movie sans encore toucher aux genres
-        movie = super(MovieForm, self).save(commit=False)
-        
+        movie = super().save(commit=False)
         if commit:
-            movie.save()  # Sauvegarder le film avant d'ajouter les genres
-        
-        # Supprimer les relations existantes dans MovieGenres
+            movie.save()
+        # Handle genres
+        movie_genres = self.cleaned_data['genres']
         MovieGenres.objects.filter(movie=movie).delete()
-        
-        # Créer de nouvelles associations pour les genres sélectionnés
-        for genre in self.cleaned_data['genres']:
+        for genre in movie_genres:
             MovieGenres.objects.create(movie=movie, genre=genre)
-        
         return movie
