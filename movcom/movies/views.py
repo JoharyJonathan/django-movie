@@ -4,6 +4,7 @@ from .models import Actor, Genre, Movie, MovieGenres
 from .forms import ActorForm, GenreForm, MovieForm
 from django.utils import timezone
 from django.conf import settings
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -160,6 +161,12 @@ def movie_delete(request, pk):
 
 def movie(request):
     movies = Movie.objects.all()
+    
+    # paginate the view, 6 per pages
+    paginator = Paginator(movies, 6)
+    
+    page_number = request.GET.get('page')
+    movies = paginator.get_page(page_number)
     
     return render(request, 'movies/movie.html', {'movies': movies})
 
