@@ -172,8 +172,12 @@ def movie(request):
 
 def movie_detail(request, id):
     movie = get_object_or_404(Movie, pk=id)
+    genres = Genre.objects.all()
     
-    return render(request, 'movies/movie_detail.html', {'movie': movie})
+    return render(request, 'movies/movie_detail.html', {'movie': movie, 'genres': genres})
 
-def test(request):
-    return render(request, 'uses.html')
+def movie_by_genre(request, genre_id):
+    genre = get_object_or_404(Genre, id=genre_id)
+    movies = Movie.objects.filter(movie_genres__genre=genre)
+    
+    return render(request, 'movies/movie_list.html', {'movies': movies, 'selected_genre': genre})
