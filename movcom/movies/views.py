@@ -183,8 +183,20 @@ def movie_by_genre(request, genre_id):
     return render(request, 'movies/movies_by_genre.html', {'movies': movies, 'selected_genre': genre})
 
 def genre(request):
+    search_query = request.GET.get('search', '')
     genres_list = Genre.objects.all()
     paginator = Paginator(genres_list, 10)
+    
+    if search_query:
+        # Filtrer les genres en fonction du terme de recherche
+        genre = Genre.objects.filter(name__icontains=search_query).first()
+        if genre:
+            # Rediriger vers l'URL avec l'ID du genre
+            return redirect('movie_by_genre', genre_id=genre.id)
+    
+    # Si aucun genre n'est trouvé ou si le terme de recherche est vide
+    genres_list = Genre.objects.all()
+    paginator = Paginator(genres_list, 10)  # 10 genres par page
 
     page = request.GET.get('page')
     try:
@@ -194,4 +206,4 @@ def genre(request):
     except EmptyPage:
         genres = paginator.page(paginator.num_pages)
 
-    return render(request, 'genres/genres.html', {'genre': genres, 'genres_count': paginator.count, 'paginator': paginator})
+    return render(request, 'genres/genres.html', {'genre': genres, 'genres_count': paginator.count, 'paginator': paginator, 'search_query': search_query})
