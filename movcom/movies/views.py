@@ -181,3 +181,8 @@ def movie_by_genre(request, genre_id):
     movies = Movie.objects.filter(movie_genres__genre=genre)
     
     return render(request, 'movies/movies_by_genre.html', {'movies': movies, 'selected_genre': genre})
+
+def genre(request):
+    genres = Genre.objects.all()
+    
+    return render(request, 'genres/genres.html', {'genre': genres})
