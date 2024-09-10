@@ -34,11 +34,11 @@
               <div class="collapse navbar-collapse" id="navbarExample01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item active">
-                    <a class="nav-link" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" aria-current="page" href="{% url 'movie' %}">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#" rel="nofollow"
-                      target="_blank">Genres</a>
+                    <a class="nav-link" href="{% url 'genre-list' %}" rel="nofollow"
+                      >Genres</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#" target="_blank">Actors</a>
