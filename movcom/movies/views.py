@@ -180,4 +180,4 @@ def movie_by_genre(request, genre_id):
     genre = get_object_or_404(Genre, id=genre_id)
     movies = Movie.objects.filter(movie_genres__genre=genre)
     
-    return render(request, 'movies/movie_list.html', {'movies': movies, 'selected_genre': genre})
+    return render(request, 'movies/movies_by_genre.html', {'movies': movies, 'selected_genre': genre})
