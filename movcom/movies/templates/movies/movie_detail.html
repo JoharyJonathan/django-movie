@@ -15,7 +15,7 @@
                         <div class="text-muted fst-italic mb-2">Release date on {{ movie.release_year }}</div>
                         <!-- Post categories-->
                         {% for movie_genre in movie.movie_genres.all %}
-                            <a class="badge bg-secondary text-decoration-none link-light" href="#">{{ movie_genre.genre.name }}</a>
+                            <a class="badge bg-secondary text-decoration-none link-light" href="{% url 'movie_by_genre' movie_genre.genre.id %}">{{ movie_genre.genre.name }}</a>
                         {% endfor %}
                     </header>
                     <!-- Preview image figure-->
