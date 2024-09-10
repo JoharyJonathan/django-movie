@@ -4,7 +4,7 @@ from .models import Actor, Genre, Movie, MovieGenres
 from .forms import ActorForm, GenreForm, MovieForm
 from django.utils import timezone
 from django.conf import settings
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # Create your views here.
@@ -183,6 +183,15 @@ def movie_by_genre(request, genre_id):
     return render(request, 'movies/movies_by_genre.html', {'movies': movies, 'selected_genre': genre})
 
 def genre(request):
-    genres = Genre.objects.all()
-    
-    return render(request, 'genres/genres.html', {'genre': genres})
+    genres_list = Genre.objects.all()
+    paginator = Paginator(genres_list, 10)
+
+    page = request.GET.get('page')
+    try:
+        genres = paginator.page(page)
+    except PageNotAnInteger:
+        genres = paginator.page(1)
+    except EmptyPage:
+        genres = paginator.page(paginator.num_pages)
+
+    return render(request, 'genres/genres.html', {'genre': genres, 'genres_count': paginator.count, 'paginator': paginator})
