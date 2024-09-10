@@ -51,12 +51,12 @@
                     </div>
                 </div>
                 <div class="job-right my-4 flex-shrink-0">
-                    <a href="#" class="btn d-block w-100 d-sm-inline-block btn-light">Search now</a>
+                    <a href="{% url 'movie_by_genre' genre.id %}" class="btn d-block w-100 d-sm-inline-block btn-light">Search now</a>
                 </div>
             </div>
             {% endfor %}
         </div>
-        
+
     </div>    
         <nav aria-label="Page navigation">
             <ul class="pagination pagination-reset justify-content-center">
