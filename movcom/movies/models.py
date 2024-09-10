@@ -19,6 +19,7 @@ class Genre(models.Model):
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
+    synopsys = models.TextField(blank=True, null=True)
     release_year = models.IntegerField()
     director = models.CharField(max_length=255)
     actors = models.ManyToManyField(Actor, related_name='movies')

@@ -24,7 +24,7 @@ class MovieForm(forms.ModelForm):
 
     class Meta:
         model = Movie
-        fields = ['title', 'description', 'release_year', 'director', 'actors', 'poster', 'rating']
+        fields = ['title', 'description', 'synopsys', 'release_year', 'director', 'actors', 'poster', 'rating']
 
     def save(self, commit=True):
         movie = super().save(commit=False)
