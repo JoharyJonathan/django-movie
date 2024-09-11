@@ -19,4 +19,5 @@ urlpatterns = [
     path('genre/<int:genre_id>/', views.movie_by_genre, name='movie_by_genre'),
     path('genre-list/', views.genre, name='genre-list'),
     path('actor-list/', views.actors, name='actor-list'),
+    path('actor/<int:actor_id>/', views.movie_by_actor, name='movie_by_actor'),
 ]

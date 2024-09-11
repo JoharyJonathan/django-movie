@@ -103,8 +103,15 @@ def movie_create(request):
     if request.method == 'POST':
         form = MovieForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('movie_list')  # Redirige vers la page appropriée
+            movie = form.save(commit=False)
+            movie.save()
+            
+            # Manage actors
+            actors = form.cleaned_data.get('actors')
+            if actors:
+                movie.actors.set(actors)
+            
+            return redirect('movie_list')
     else:
         form = MovieForm()
     return render(request, 'movies/movie_form.html', {'form': form})
@@ -129,6 +136,11 @@ def movie_update(request, pk):
                 movie.poster_url = save_uploaded_image(poster_file)
             
             movie.save()  # Sauvegarder le film
+            
+            # Manage actors
+            actors = form.cleaned_data.get('actors')
+            if actors:
+                movie.actors.set(actors)
 
             # Gestion des genres
             # Supprimer les anciennes associations
@@ -223,8 +235,8 @@ def actors(request):
         
     return render(request, 'actors/actors.html', {'actor': actors, 'actors_count': paginator.count, 'search_query': search_query})
 
-"""
 def movie_by_actor(request, actor_id):
-    actor = get_object_or_404(Actor, actor_id)
-    movies = Movie.objects.filter()
-"""
+    actor = get_object_or_404(Actor, id=actor_id)
+    movies = Movie.objects.all()
+    
+    return render(request, 'movies/movies_by_actor.html', {'movies': movies, 'actor': actor})

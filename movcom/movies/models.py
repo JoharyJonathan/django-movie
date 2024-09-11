@@ -41,3 +41,13 @@ class MovieGenres(models.Model):
         
     def __str__(self):
         return f"{self.movie.title} - {self.genre.name}"
+    
+class MovieActor(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
+    
+    class Meta:
+        unique_together = ('movie', 'actor')
+        
+    def __str__(self):
+        return f"{self.actor} in {self.movie}"
