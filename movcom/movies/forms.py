@@ -5,7 +5,7 @@ from .models import Actor, Genre, Movie, MovieGenres
 class ActorForm(forms.ModelForm):
     class Meta:
         model = Actor
-        fields = ['first_name', 'last_name', 'date_of_birth']
+        fields = ['first_name', 'last_name', 'date_of_birth', 'bio']
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
