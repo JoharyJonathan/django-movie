@@ -207,3 +207,24 @@ def genre(request):
         genres = paginator.page(paginator.num_pages)
 
     return render(request, 'genres/genres.html', {'genre': genres, 'genres_count': paginator.count, 'paginator': paginator, 'search_query': search_query})
+
+def actors(request):
+    actors_list = Actor.objects.all()
+    search_query = request.GET.get('search', '')
+    paginator = Paginator(actors_list, 10)
+    
+    page = request.GET.get('page')
+    try:
+        actors = paginator.page(page)
+    except PageNotAnInteger:
+        actors = paginator.page(1)
+    except EmptyPage:
+        actors = paginator.page(paginator.num_pages)
+        
+    return render(request, 'actors/actors.html', {'actor': actors, 'actors_count': paginator.count, 'search_query': search_query})
+
+"""
+def movie_by_actor(request, actor_id):
+    actor = get_object_or_404(Actor, actor_id)
+    movies = Movie.objects.filter()
+"""

@@ -1,6 +1,4 @@
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -20,4 +18,5 @@ urlpatterns = [
     path('detail/<int:id>/', views.movie_detail, name='movie-detail'),
     path('genre/<int:genre_id>/', views.movie_by_genre, name='movie_by_genre'),
     path('genre-list/', views.genre, name='genre-list'),
+    path('actor-list/', views.actors, name='actor-list'),
 ]
