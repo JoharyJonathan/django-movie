@@ -48,25 +48,17 @@
                   </li>
                 </ul>
       
-                <ul class="navbar-nav d-flex flex-row">
-                  <nav class="navbar navbar-light bg-body-tertiary">
-                    <div class="container-fluid">
-                        <a class="navbar-brand"></a>
-                        <form class="d-flex input-group w-auto" action="#" method="get">
-                            <input
-                              type="search"
-                              name="q"
-                              class="form-control rounded my-2"
-                              placeholder="Search"
-                              aria-label="Search"
-                              aria-describedby="search-addon"
-                            />
-                            <span class="input-group-text border-0" id="search-addon">
-                              <i class="fas fa-search"></i>
-                            </span>
-                        </form>
-                    </div>
-                  </nav>
+                <ul class="navbar-nav d-flex flex-row" style="margin-right: 55px">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Profile
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">View Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Update Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Log Out</a></li>
+                    </ul>
+                </li>
                 </li>
                 </ul>
               </div>
