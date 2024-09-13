@@ -53,23 +53,23 @@
             <li><a href="{% url 'home' %}">Home</a></li>
             <li>
                 {% if user.is_authenticated %}
-                    <a href="#">InBox</a>
+                    <a href="{% url 'genre-list' %}">Genres</a>
                 {% else %}
-                    <a href="{% url 'login' %}">InBox</a>
+                    <a href="{% url 'login' %}">Genres</a>
                 {% endif %}
             </li>
             <li>
                 {% if user.is_authenticated %}
-                    <a href="#">Spams</a>
+                    <a href="{% url 'actor-list' %}">Actors</a>
                 {% else %}
-                    <a href="{% url 'login' %}">Spams</a>
+                    <a href="{% url 'login' %}">Actors</a>
                 {% endif %}
             </li>
             <li>
                 {% if user.is_authenticated %}
-                    <a href="#">Sents</a>
+                    <a href="#">History</a>
                 {% else %}
-                    <a href="{% url 'login' %}">Sents</a>
+                    <a href="{% url 'login' %}">History</a>
                 {% endif %}
             </li>
             <li>
