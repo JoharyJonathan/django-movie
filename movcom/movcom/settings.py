@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'authe',
     'admins',
     'movies',
-    'recommendations'
+    'recommendations',
+    'ratings'
 ]
 
 MIDDLEWARE = [
