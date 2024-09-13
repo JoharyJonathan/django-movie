@@ -40,7 +40,7 @@ class ProfileUpdateForm(UserChangeForm):
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email', 'password', 'profile_image_file']
+        fields = ['username', 'email', 'profile_image_file']
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -60,11 +60,6 @@ class ProfileUpdateForm(UserChangeForm):
 
             # update first_name fields with the file path
             user.first_name = os.path.join('profile_images', new_filename)
-
-        # if password field is not empty, update password
-        password = self.cleaned_data.get('password')
-        if password and password.split():
-            user.set_password(password)
 
         if commit:
             user.save()

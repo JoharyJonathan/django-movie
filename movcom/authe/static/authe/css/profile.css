@@ -50,8 +50,6 @@ body {
 .img-radius {
     border-radius: 5px;
 }
-
-
  
 h6 {
     font-size: 14px;
@@ -132,4 +130,11 @@ p {
     margin: 0 10px 0 0;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
+}
+
+#profile-image {
+    width: 150px;        
+    height: 150px;         
+    border-radius: 50%;    
+    object-fit: cover; 
 }
