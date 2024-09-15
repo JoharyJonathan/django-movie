@@ -26,6 +26,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('movies/', include('movies.urls')),
     path('ratings/', include('ratings.urls')),
+    path('comments/', include('comments.urls')),
     path('', home_view, name='home'),
 ]
 

@@ -2,6 +2,7 @@ import os
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Actor, Genre, Movie, MovieGenres
 from .forms import ActorForm, GenreForm, MovieForm
+from comments.forms import CommentForm
 from django.utils import timezone
 from django.conf import settings
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -185,8 +186,9 @@ def movie(request):
 def movie_detail(request, id):
     movie = get_object_or_404(Movie, pk=id)
     genres = Genre.objects.all()
+    comments = movie.comments.filter(parent__isnull=True)
     
-    return render(request, 'movies/movie_detail.html', {'movie': movie, 'genres': genres})
+    return render(request, 'movies/movie_detail.html', {'movie': movie, 'genres': genres ,'comments': comments})
 
 def movie_by_genre(request, genre_id):
     genre = get_object_or_404(Genre, id=genre_id)
