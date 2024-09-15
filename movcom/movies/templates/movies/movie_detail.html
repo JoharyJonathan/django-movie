@@ -48,7 +48,13 @@
                                         <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
                                     </div>
                                     <div class="ms-3">
-                                        <div class="fw-bold">{{ comment.user.username }}</div>
+                                        <div class="fw-bold">
+                                            {% if comment.user == request.user %}
+                                                You
+                                            {% else %}
+                                                {{ comment.user.username }}
+                                            {% endif %}
+                                        </div>
                                         {{ comment.content }}
                 
                                         <!-- Child comments (nested comments) -->
@@ -58,7 +64,13 @@
                                                     <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
                                                 </div>
                                                 <div class="ms-3">
-                                                    <div class="fw-bold">{{ child.user.username }}</div>
+                                                    <div class="fw-bold">
+                                                        {% if child.user == request.user %}
+                                                            You
+                                                        {% else %}
+                                                            {{ child.user.username }}
+                                                        {% endif %}
+                                                    </div>
                                                     {{ child.content }}
                                                 </div>
                                             </div>
