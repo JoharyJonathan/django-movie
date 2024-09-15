@@ -45,7 +45,11 @@
                                 <!-- Parent comment-->
                                 <div class="d-flex mb-4">
                                     <div class="flex-shrink-0">
-                                        <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                        {% if comment.user.first_name %}
+                                            <img class="rounded-circle img-50" src="http://127.0.0.1:8000/media/{{ comment.user.first_name }}" alt="..." />
+                                        {% else %}
+                                            <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                        {% endif %}
                                     </div>
                                     <div class="ms-3">
                                         <div class="fw-bold">
@@ -61,7 +65,11 @@
                                         {% for child in comment.children.all %}
                                             <div class="d-flex mt-4">
                                                 <div class="flex-shrink-0">
-                                                    <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                                    {% if child.user == request.user %}
+                                                        <img class="rounded-circle img-50" src="http://127.0.0.1:8000/media/{{ child.user.first_name }}" alt="..." />
+                                                    {% else %}
+                                                        <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                                    {% endif %}
                                                 </div>
                                                 <div class="ms-3">
                                                     <div class="fw-bold">
