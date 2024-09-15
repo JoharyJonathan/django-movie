@@ -113,10 +113,50 @@
                 </div>                
                 <!-- Side widget-->
                 <div class="card mb-4">
-                    <div class="card-header">Side Widget</div>
-                    <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
+                    <div class="card-header">Rating</div>
+                    <div class="card-body">
+                        <div>
+                            <div class="d-flex justify-content-center my-3 mx-3">
+                                <div class="row">
+                                    <!-- Formulaire de rating -->
+                                    <form method="POST" action="{% url 'add_rating' movie.id %}">
+                                        {% csrf_token %}
+                                        <div class="form-group" id="rating-ability-wrapper">
+                                            <label class="control-label" for="rating">
+                                            <span class="field-label-header">How would you rate this movie?*</span><br>
+                                            <input type="hidden" id="selected_rating" name="selected_rating" value="" required="required">
+                                            </label>
+                                            <h2 class="bold rating-header">
+                                            <span class="selected-rating">0</span><small> / 5</small>
+                                            </h2>
+                                            <button type="button" class="btnrating btn btn-default btn-lg" data-attr="1" id="rating-star-1">
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btnrating btn btn-default btn-lg" data-attr="2" id="rating-star-2">
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btnrating btn btn-default btn-lg" data-attr="3" id="rating-star-3">
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btnrating btn btn-default btn-lg" data-attr="4" id="rating-star-4">
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btnrating btn btn-default btn-lg" data-attr="5" id="rating-star-5">
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                        
+                                        <!-- Bouton de soumission -->
+                                        <div class="text-center mt-4 mb-0">
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit Rating</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
                 </div>
             </div>
-        </div>
+        </div><br><br><br><br><br><br><br>
     </div>
 {% endblock content %}

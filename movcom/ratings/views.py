@@ -18,7 +18,7 @@ def add_rating(request, movie_id):
     
     # re-calculate the average of the rating
     new_avg_rating = Rating.objects.filter(movie=movie).aggregate(Avg('rating'))['rating__avg']
-    movie.rating = new_avg_rating
+    movie.rating = new_avg_rating or 0
     movie.save()
     
     return redirect('movie_detail', movie_id=movie.id)
