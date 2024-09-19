@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Actor(models.Model):
@@ -51,3 +52,11 @@ class MovieActor(models.Model):
         
     def __str__(self):
         return f"{self.actor} in {self.movie}"
+    
+class WatchHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
+    watched_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.user.username} watched {self.movie.title}'

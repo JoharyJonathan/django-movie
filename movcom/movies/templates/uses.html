@@ -14,8 +14,9 @@
     <link rel="stylesheet" href="{% static 'movies/css/blogdetail.css' %}" />
     <link rel="stylesheet" href="{% static 'genres/css/genrelist.css' %}" />
     <link rel="stylesheet" href="{% static 'movies/css/uses.css' %}" />
-    <link rel="stylesheet" href="{% static 'rating/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'comments/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'rating/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'comments/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'movies/css/history.css' %}" />
 </head>
 <body>
     <header>
@@ -42,9 +43,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'actor-list' %}">Actors</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">History</a>
-                    </li>
                 </ul>
 
                 <ul class="navbar-nav d-flex flex-row">
@@ -55,6 +53,8 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{% url 'profile' %}">View Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'profile-update' %}">Update Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'watch_history' %}">History</a></li>
+                            <li><a class="dropdown-item" href="#">Favorites</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
                         </ul>
                     </li>

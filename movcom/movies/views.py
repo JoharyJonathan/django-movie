@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Actor, Genre, Movie, MovieGenres
+from .models import Actor, Genre, Movie, MovieGenres, WatchHistory
 from .forms import ActorForm, GenreForm, MovieForm
 from django.http import JsonResponse
 from django.utils import timezone
@@ -188,6 +188,10 @@ def movie_detail(request, id):
     genres = Genre.objects.all()
     comments = movie.comments.filter(parent__isnull=True)
     
+    # Save history of the connected user
+    if request.user.is_authenticated:
+        WatchHistory.objects.create(user=request.user, movie=movie)
+    
     return render(request, 'movies/movie_detail.html', {'movie': movie, 'genres': genres ,'comments': comments})
 
 def movie_by_genre(request, genre_id):
@@ -252,3 +256,11 @@ def ajax_movie_search(request):
         results = []
         
     return JsonResponse({'movies': results})
+
+def watch_history(request):
+    if request.user.is_authenticated:
+        history = WatchHistory.objects.filter(user=request.user).order_by('-watched_at')
+        
+        return render(request, 'movies/watch_history.html', {'history': history})
+    else:
+        return redirect('login')
