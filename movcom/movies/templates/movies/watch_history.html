@@ -20,7 +20,7 @@
                         <!-- Placeholder image, you can replace it with actual movie poster if available -->
                         <img src="{{ item.movie.poster.url }}" class="card-img-top" alt="{{ item.movie.title }}">
                         <div class="card-body p-4">
-                            <h4 class="fw-bold mb-4">{{ item.movie.title }}</h4>
+                            <h4 class="fw-bold mb-4"><a href="{% url 'movie-detail' item.movie.id %}" class="text-body text-decoration-none">{{ item.movie.title }}</a></h4>
                             <p class="text-muted mb-4"><i class="far fa-clock" aria-hidden="true"></i> {{ item.watched_at|date:"d/m/Y H:i" }}</p>
                             <p class="mb-0">{{ item.movie.synopsys }}</p>
                         </div>
