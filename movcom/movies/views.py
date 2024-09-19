@@ -247,7 +247,7 @@ def ajax_movie_search(request):
     query = request.GET.get('q')
     if query:
         movies = Movie.objects.filter(title__icontains=query)
-        results = [{'title': movie.title} for movie in movies]
+        results = [{'id': movie.id, 'title': movie.title} for movie in movies]
     else:
         results = []
         

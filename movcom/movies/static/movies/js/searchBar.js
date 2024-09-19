@@ -18,7 +18,8 @@ $(document).ready(function() {
                     if (data.movies.length > 0) {
                         data.movies.forEach(function(movie) {
                             // Créer un lien cliquable pour chaque film avec un URL dynamique vers sa page de détail
-                            let detailUrl = `http//127.0.0.1:8000/movies/detail/${movie.id}/`;  // Remplacez cette URL si nécessaire
+                            let detailUrl = `http://127.0.0.1:8000/movies/detail/${movie.id}/`;  // Remplacez cette URL si nécessaire
+                            console.log(movie.id)
                             $('#search-results').append(
                                 `<a class="list-group-item" href="${detailUrl}">${movie.title}</a>`
                             );
