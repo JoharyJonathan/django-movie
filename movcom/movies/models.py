@@ -58,5 +58,8 @@ class WatchHistory(models.Model):
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
     watched_at = models.DateTimeField(auto_now_add=True)
     
+    class Meta:
+        ordering = ['-watched_at']
+    
     def __str__(self):
         return f'{self.user.username} watched {self.movie.title}'

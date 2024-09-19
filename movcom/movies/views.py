@@ -188,9 +188,9 @@ def movie_detail(request, id):
     genres = Genre.objects.all()
     comments = movie.comments.filter(parent__isnull=True)
     
-    # Save history of the connected user
+    # Update history
     if request.user.is_authenticated:
-        WatchHistory.objects.create(user=request.user, movie=movie)
+        update_watch_history(request.user, movie.id)
     
     return render(request, 'movies/movie_detail.html', {'movie': movie, 'genres': genres ,'comments': comments})
 
@@ -264,3 +264,16 @@ def watch_history(request):
         return render(request, 'movies/watch_history.html', {'history': history})
     else:
         return redirect('login')
+    
+def update_watch_history(user, movie_id):
+    movie = Movie.objects.get(id=movie_id)
+    
+    # Check if this movie is already existing in the user history
+    existing_history = WatchHistory.objects.filter(user=user, movie=movie)
+    
+    # if exists then delete it
+    if existing_history.exists():
+        existing_history.delete()
+        
+    # Add new entry with updated timestamp
+    WatchHistory.objects.create(user=user, movie=movie, watched_at=timezone.now())
