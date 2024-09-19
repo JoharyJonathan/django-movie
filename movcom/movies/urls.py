@@ -20,4 +20,5 @@ urlpatterns = [
     path('genre-list/', views.genre, name='genre-list'),
     path('actor-list/', views.actors, name='actor-list'),
     path('actor/<int:actor_id>/', views.movie_by_actor, name='movie_by_actor'),
+    path('ajax/search/', views.ajax_movie_search, name='ajax_movie_search'),
 ]

@@ -2,7 +2,7 @@ import os
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Actor, Genre, Movie, MovieGenres
 from .forms import ActorForm, GenreForm, MovieForm
-from comments.forms import CommentForm
+from django.http import JsonResponse
 from django.utils import timezone
 from django.conf import settings
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -242,3 +242,13 @@ def movie_by_actor(request, actor_id):
     movies = Movie.objects.all()
     
     return render(request, 'movies/movies_by_actor.html', {'movies': movies, 'actor': actor})
+
+def ajax_movie_search(request):
+    query = request.GET.get('q')
+    if query:
+        movies = Movie.objects.filter(title__icontains=query)
+        results = [{'title': movie.title} for movie in movies]
+    else:
+        results = []
+        
+    return JsonResponse({'movies': results})

@@ -97,11 +97,16 @@
                     <div class="card-header">Search</div>
                     <div class="card-body">
                         <div class="input-group">
-                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                            <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                            <input class="form-control" type="text" id="search-input" data-url="{% url 'ajax_movie_search' %}" placeholder="Enter search term..." />
                         </div>
+                        <div id="spinner" class="text-center mt-2" style="display: none;">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <ul id="search-results" class="list-group mt-3"></ul>
                     </div>
-                </div>
+                </div>                
                 <!-- Categories widget-->
                 <div class="card mb-4">
                     <div class="card-header">Categories</div>
