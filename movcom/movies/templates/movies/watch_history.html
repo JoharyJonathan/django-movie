@@ -21,7 +21,10 @@
                         <img src="{{ item.movie.poster.url }}" class="card-img-top" alt="{{ item.movie.title }}">
                         <div class="card-body p-4">
                             <h4 class="fw-bold mb-4"><a href="{% url 'movie-detail' item.movie.id %}" class="text-body text-decoration-none">{{ item.movie.title }}</a></h4>
-                            <p class="text-muted mb-4"><i class="far fa-clock" aria-hidden="true"></i> {{ item.watched_at|date:"d/m/Y H:i" }}</p>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <p class="text-muted mb-0"><i class="far fa-clock" aria-hidden="true"></i> {{ item.watched_at|date:"d/m/Y H:i" }}</p>
+                                <a href="{% url 'delete_watch_history' item.movie.id %}" class="btn btn-danger btn-sm">Remove from history</a>
+                            </div>
                             <p class="mb-0">{{ item.movie.synopsys }}</p>
                         </div>
                     </div>

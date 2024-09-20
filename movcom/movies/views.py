@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.conf import settings
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def actor_create(request):
@@ -277,3 +277,10 @@ def update_watch_history(user, movie_id):
         
     # Add new entry with updated timestamp
     WatchHistory.objects.create(user=user, movie=movie, watched_at=timezone.now())
+    
+@login_required
+def delete_watch_history(request, movie_id):
+    history_item = get_object_or_404(WatchHistory, user=request.user, movie_id=movie_id)
+    history_item.delete()
+    
+    return redirect('watch_history')
