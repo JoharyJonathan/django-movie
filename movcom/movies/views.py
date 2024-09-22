@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
+from favorites.models import Favorite
 
 # Create your views here.
 def actor_create(request):
@@ -188,11 +189,13 @@ def movie_detail(request, id):
     genres = Genre.objects.all()
     comments = movie.comments.filter(parent__isnull=True)
     
+    user_favorite = Favorite.objects.filter(user=request.user, movie=movie).exists()
+    
     # Update history
     if request.user.is_authenticated:
         update_watch_history(request.user, movie.id)
     
-    return render(request, 'movies/movie_detail.html', {'movie': movie, 'genres': genres ,'comments': comments})
+    return render(request, 'movies/movie_detail.html', {'movie': movie, 'genres': genres ,'comments': comments, 'user_favorite': user_favorite})
 
 def movie_by_genre(request, genre_id):
     genre = get_object_or_404(Genre, id=genre_id)
