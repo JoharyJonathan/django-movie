@@ -59,7 +59,11 @@ def genre_create(request):
 
 def genre_list(request):
     genres = Genre.objects.all()
-    return render(request, 'genres/genre_list.html', {'genres': genres})
+    paginator = Paginator(genres, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'genres/genre_list.html', {'genres': genres, 'page_obj': page_obj})
 
 def genre_update(request, pk):
     genre = get_object_or_404(Genre, pk=pk)
