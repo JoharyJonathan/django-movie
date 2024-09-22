@@ -23,15 +23,15 @@
           <a href="#" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init aria-current="true">
             <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Main dashboard</span>
           </a>
-          <a href="#" class="list-group-item list-group-item-action py-2 active" data-mdb-ripple-init>
+          <a href="#" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init>
             <i class="fas fa-chart-area fa-fw me-3"></i><span>Website traffic </span>
           </a>
-          <a href="#" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init><i
-              class="fas fa-lock fa-fw me-3"></i><span>Password</span></a>
-          <a href="#" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init><i
-              class="fas fa-chart-line fa-fw me-3"></i><span>Analytics</span></a>
-          <a href="#" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init>
-            <i class="fas fa-chart-pie fa-fw me-3"></i><span>SEO</span>
+          <a href="{% url 'genre_list' %}" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init><i
+              class="fa-solid fa-list fa-fw me-3"></i><span>Genres</span></a>
+          <a href="{% url 'movie_list' %}" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init><i
+              class="fa-solid fa-film fa-fw me-3"></i><span>Movies</span></a>
+          <a href="{% url 'actor_list' %}" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init>
+            <i class="fa-solid fa-user-tie fa-fw me-3"></i><span>Actors</span>
           </a>
           <a href="#" class="list-group-item list-group-item-action py-2" data-mdb-ripple-init><i
               class="fas fa-chart-bar fa-fw me-3"></i><span>Orders</span></a>
@@ -176,5 +176,6 @@
 
     <script src="{% static 'admins/js/mdb.umd.min.js' %}"></script>
     <script src="{% static 'admins/js/admin.js' %}"></script>
+    <script src="{% static 'admins/js/click.js' %}"></script>
 </body>
 </html>
