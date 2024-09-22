@@ -10,6 +10,7 @@ urlpatterns = [
     path('ad/genres/', views.genre_list, name='genre_list'),
     path('ad/genres/<int:pk>/edit/', views.genre_update, name='genre_update'),
     path('ad/genres/<int:pk>/delete/', views.genre_delete, name='genre_delete'),
+    path('ad/genres/delete-multiple/', views.genre_delete_multiple, name='genre_delete_multiple'),
     path('ad/movies/new/', views.movie_create, name='movie_create'),
     path('ad/movies/', views.movie_list, name='movie_list'),
     path('ad/movies/<int:pk>/edit/', views.movie_update, name='movie_update'),

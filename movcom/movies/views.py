@@ -1,5 +1,5 @@
 import os
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from .models import Actor, Genre, Movie, MovieGenres, WatchHistory
 from .forms import ActorForm, GenreForm, MovieForm
 from django.http import JsonResponse
@@ -100,6 +100,16 @@ def save_uploaded_image(file):
             
     # return the stored path in poster_url field
     return f"movies_posters/{new_filename}"
+
+def genre_delete_multiple(request):
+    if request.method == 'POST':
+        genre_ids = request.POST.getlist('genres_to_delete[]')
+        if genre_ids:
+            genres = get_list_or_404(Genre, id__in=genre_ids)
+            for genre in genres:
+                genre.delete()
+                
+        return redirect('genre_list')
 
 def movie_create(request):
     if request.method == 'POST':
