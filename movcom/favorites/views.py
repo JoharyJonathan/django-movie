@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from .models import Favorite
 from movies.models import Movie
 
@@ -17,9 +18,17 @@ def toggle_favorite(request, movie_id):
 @login_required
 def favorite_movies(request):
     favoris = Favorite.objects.filter(user=request.user).select_related('movie')
+    nb_favoris = favoris.count()
+    
+    # Pagination
+    paginator = Paginator(favoris, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     
     context = {
-        'favorites': favoris
+        'favorites': favoris,
+        'nb_favoris': nb_favoris,
+        'page_obj': page_obj
     }
     
     return render(request, 'movies/favorites.html', context)
