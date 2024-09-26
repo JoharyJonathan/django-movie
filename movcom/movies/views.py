@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.conf import settings
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from favorites.models import Favorite
 
@@ -23,8 +24,11 @@ def actor_create(request):
     
 def actor_list(request):
     actors = Actor.objects.all()
+    paginator = Paginator(actors, 10)
+    page_number = request.GET.get('pages')
+    page_obj = paginator.get_page(page_number)
     
-    return render(request, 'actors/actor_list.html', {'actors': actors})
+    return render(request, 'actors/actor_list.html', {'actors': page_obj, 'page_obj': page_obj})
 
 def actor_update(request, pk):
     actor = get_object_or_404(Actor, pk=pk)
@@ -45,6 +49,18 @@ def actor_delete(request, pk):
         return redirect('actor_list')
     
     return render(request, 'actors/actor_confirm_delete.html', {'actor': actor})
+
+def actor_delete_multiple(request):
+    if request.method == 'POST':
+        actor_ids = request.POST.getlist('selected_actors')
+        if actor_ids:
+            Actor.objects.filter(id__in=actor_ids).delete()
+            messages.success(request, 'Actors deleted successfully.')
+        else:
+            messages.warning(request, 'No actors were selected for deletion.')
+        return redirect('actor_list')
+    
+    return redirect('actor_list')
 
 def genre_create(request):
     if request.method == 'POST':
