@@ -23,12 +23,12 @@ def actor_create(request):
     return render(request, 'actors/actor_form.html', {'form': form})
     
 def actor_list(request):
-    actors = Actor.objects.all()
+    actors = Actor.objects.all().order_by('id')
     paginator = Paginator(actors, 10)
-    page_number = request.GET.get('pages')
+    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
-    return render(request, 'actors/actor_list.html', {'actors': page_obj, 'page_obj': page_obj})
+
+    return render(request, 'actors/actor_list.html', {'actors': page_obj.object_list, 'page_obj': page_obj})
 
 def actor_update(request, pk):
     actor = get_object_or_404(Actor, pk=pk)
