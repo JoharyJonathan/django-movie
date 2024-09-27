@@ -12,7 +12,9 @@
                             <h2>User <b>Management</b></h2>
                         </div>
                         <div class="col-sm-7">
-                            <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
+                            <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#addUserModal">
+                                <i class="material-icons">&#xE147;</i> <span>Add New User</span>
+                             </a>                             
                             <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>						
                         </div>
                     </div>
@@ -29,7 +31,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Remplacez users par page_obj ici -->
                         {% for user in page_obj %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
@@ -88,5 +89,78 @@
                 </div>                
             </div>
         </div>
-    </div>     
+    </div>
+
+    <!-- The Modal -->
+    <div class="modal fade" id="addUserModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="addUserForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name">Image:</label>
+                            <input type="file" class="form-control" id="first_name" name="first_name" accept="image/*" required>
+                        </div>                        
+                        <div class="form-group">
+                            <label for="last_name">Last Name:</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Ajax Script for Submitting the Form -->
+    <script>
+        $(document).ready(function() {
+            $('#addUserForm').submit(function(event) {
+                event.preventDefault();
+                
+                // Créer un objet FormData pour gérer les fichiers
+                var formData = new FormData(this);
+    
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'add-user' %}",
+                    data: formData,
+                    contentType: false,  // Nécessaire pour l'envoi de fichiers
+                    processData: false,  // Nécessaire pour l'envoi de fichiers
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload(); // Recharger la page
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(response) {
+                        alert('An error occurred while adding the user.');
+                    }
+                });
+            });
+        });
+    </script>     
+
 {% endblock content %}

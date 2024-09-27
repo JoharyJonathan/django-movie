@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% load static %}
     <br><br><br><br>
     <div class="container">
         <h2>User Details</h2>
         <ul>
+            {% if user.first_name %}
+                <img src="http://127.0.0.1:8000/media/{{ user.first_name }}" alt="img" style="width: 50px; height: 50px;">
+            {% else %}
+                <img src="{% static 'admins/img/avatar-svgrepo-com.svg' %}" alt="img" style="width: 50px; height: 50px;">
+            {% endif %}
             <li><strong>Username:</strong> {{ user.username }}</li>
-            <li><strong>First Name:</strong> {{ user.first_name }}</li>
             <li><strong>Last Name:</strong> {{ user.last_name }}</li>
             <li><strong>Email:</strong> {{ user.email }}</li>
             <li><strong>Date Joined:</strong> {{ user.date_joined|date:"d/m/Y" }}</li>
