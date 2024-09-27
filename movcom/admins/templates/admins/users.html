@@ -34,9 +34,9 @@
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 {% if user.first_name %}
-                                    <td><a href="#"><img src="http://127.0.0.1:8000/media/{{ user.first_name }}" class="avatar" alt="Avatar" style="width: 50px; height: 50px;">{{ user.username }}</a></td>
+                                    <td><a href="{% url 'user-detail' user.id %}"><img src="http://127.0.0.1:8000/media/{{ user.first_name }}" class="avatar" alt="Avatar" style="width: 50px; height: 50px;">{{ user.username }}</a></td>
                                 {% else %}
-                                    <td><a href="#"><img src="{% static 'admins/img/avatar-svgrepo-com.svg' %}" class="avatar" alt="Avatar" style="width: 50px; height: 50px;">{{ user.username }}</a></td>
+                                    <td><a href="{% url 'user-detail' user.id %}"><img src="{% static 'admins/img/avatar-svgrepo-com.svg' %}" class="avatar" alt="Avatar" style="width: 50px; height: 50px;">{{ user.username }}</a></td>
                                 {% endif %}
                                 <td>{{ user.date_joined|date:"d/m/Y" }}</td>                        
                                 <td>Admin</td>
