@@ -1,12 +1,13 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.hashers import make_password
 import os
+import pandas as pd
 
 # Create your views here.
 def user_list(request):
@@ -79,3 +80,18 @@ def delete_user(request, user_id):
         return JsonResponse({'success': True})  # Réponse en JSON pour AJAX
     
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+def export_users_to_excel(request):
+    users = User.objects.all().values('username', 'first_name', 'last_name', 'email', 'date_joined')
+        
+    df = pd.DataFrame(users)
+    
+    if 'date_joined' in df.columns:
+        df['date_joined'] = pd.to_datetime(df['date_joined']).dt.tz_localize(None)
+    
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Diposition'] = 'attachement; filename=users.xlsx'
+    
+    df.to_excel(response, index=False)
+    
+    return response
