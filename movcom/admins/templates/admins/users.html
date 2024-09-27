@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load static %}
     <br><br>
     <div class="container-xl">
         <div class="table-responsive">
@@ -28,65 +29,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td><a href="#"><img src="/examples/images/avatar/1.jpg" class="avatar" alt="Avatar"> Michael Holz</a></td>
-                            <td>04/10/2013</td>                        
-                            <td>Admin</td>
-                            <td><span class="status text-success">&bull;</span> Active</td>
-                            <td>
-                                <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td><a href="#"><img src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar"> Paula Wilson</a></td>
-                            <td>05/08/2014</td>                       
-                            <td>Publisher</td>
-                            <td><span class="status text-success">&bull;</span> Active</td>
-                            <td>
-                                <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td><a href="#"><img src="/examples/images/avatar/3.jpg" class="avatar" alt="Avatar"> Antonio Moreno</a></td>
-                            <td>11/05/2015</td>
-                            <td>Publisher</td>
-                            <td><span class="status text-danger">&bull;</span> Suspended</td>                        
-                            <td>
-                                <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
-                            </td>                        
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td><a href="#"><img src="/examples/images/avatar/4.jpg" class="avatar" alt="Avatar"> Mary Saveley</a></td>
-                            <td>06/09/2016</td>
-                            <td>Reviewer</td>
-                            <td><span class="status text-success">&bull;</span> Active</td>
-                            <td>
-                                <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td><a href="#"><img src="/examples/images/avatar/5.jpg" class="avatar" alt="Avatar"> Martin Sommer</a></td>
-                            <td>12/08/2017</td>                        
-                            <td>Moderator</td>
-                            <td><span class="status text-warning">&bull;</span> Inactive</td>
-                            <td>
-                                <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
-                            </td>
-                        </tr>
+                        {% for user in users %}
+                            <tr>
+                                <td>1</td>
+                                {% if user.first_name %}
+                                    <td><a href="#"><img src="http://127.0.0.1:8000/media/{{ user.first_name }}" class="avatar" alt="Avatar" style="width: 50px; height: 50px;">{{ user.username }}</a></td>
+                                {% else %}
+                                    <td><a href="#"><img src="{% static 'admins/img/avatar-svgrepo-com.svg' %}" class="avatar" alt="Avatar" style="width: 50px; height: 50px;">{{ user.username }}</a></td>
+                                {% endif %}
+                                <td>{{ user.date_joined }}</td>                        
+                                <td>Admin</td>
+                                <td><span class="status text-success">&bull;</span> Active</td>
+                                <td>
+                                    <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
+                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
                 <div class="clearfix">
-                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <div class="hint-text">Showing <b>5</b> out of <b>{{ user_count }}</b> entries</div>
                     <ul class="pagination">
                         <li class="page-item disabled"><a href="#">Previous</a></li>
                         <li class="page-item"><a href="#" class="page-link">1</a></li>
