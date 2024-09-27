@@ -29,15 +29,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for user in users %}
+                        <!-- Remplacez users par page_obj ici -->
+                        {% for user in page_obj %}
                             <tr>
-                                <td>1</td>
+                                <td>{{ forloop.counter }}</td>
                                 {% if user.first_name %}
                                     <td><a href="#"><img src="http://127.0.0.1:8000/media/{{ user.first_name }}" class="avatar" alt="Avatar" style="width: 50px; height: 50px;">{{ user.username }}</a></td>
                                 {% else %}
                                     <td><a href="#"><img src="{% static 'admins/img/avatar-svgrepo-com.svg' %}" class="avatar" alt="Avatar" style="width: 50px; height: 50px;">{{ user.username }}</a></td>
                                 {% endif %}
-                                <td>{{ user.date_joined }}</td>                        
+                                <td>{{ user.date_joined|date:"d/m/Y" }}</td>                        
                                 <td>Admin</td>
                                 <td><span class="status text-success">&bull;</span> Active</td>
                                 <td>
@@ -45,21 +46,46 @@
                                     <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
                                 </td>
                             </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">No users found</td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                
+                <!-- Pagination -->
                 <div class="clearfix">
-                    <div class="hint-text">Showing <b>5</b> out of <b>{{ user_count }}</b> entries</div>
+                    <div class="hint-text">Showing <b>{{ page_obj.start_index }}</b> to <b>{{ page_obj.end_index }}</b> of <b>{{ page_obj.paginator.count }}</b> entries</div>
                     <ul class="pagination">
-                        <li class="page-item disabled"><a href="#">Previous</a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">4</a></li>
-                        <li class="page-item"><a href="#" class="page-link">5</a></li>
-                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                        <!-- Lien vers la page précédente -->
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link">Previous</a></li>
+                        {% endif %}
+                
+                        <!-- Affichage des numéros de pages -->
+                        {% for page_num in page_obj.paginator.page_range %}
+                            {% if page_num == page_obj.number %}
+                                <li class="page-item active"><a class="page-link">{{ page_num }}</a></li>
+                            {% elif page_num >= page_obj.number|add:-2 and page_num <= page_obj.number|add:2 %}
+                                <li class="page-item"><a href="?page={{ page_num }}" class="page-link">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                
+                        <!-- Lien vers la page suivante -->
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link">Next</a></li>
+                        {% endif %}
                     </ul>
-                </div>
+                </div>                
             </div>
         </div>
     </div>     
