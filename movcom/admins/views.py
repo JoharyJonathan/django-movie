@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.files.storage import FileSystemStorage
@@ -69,4 +69,13 @@ def add_user(request):
 
         return JsonResponse({'success': True, 'message': 'User added successfully!'})
 
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    
+    if request.method == 'POST':
+        user.delete()
+        return JsonResponse({'success': True})  # Réponse en JSON pour AJAX
+    
     return JsonResponse({'success': False, 'message': 'Invalid request method'})

@@ -2,6 +2,7 @@
 
 {% block content %}
 {% load static %}
+{% csrf_token %}
     <br><br>
     <div class="container-xl">
         <div class="table-responsive">
@@ -44,7 +45,9 @@
                                 <td><span class="status text-success">&bull;</span> Active</td>
                                 <td>
                                     <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
+                                    <a href="#" class="delete" title="Delete" data-user-id="{{ user.id }}" onclick="deleteUser(this); return false;">
+                                        <i class="material-icons">&#xE5C9;</i>
+                                    </a>
                                 </td>
                             </tr>
                         {% empty %}
@@ -161,6 +164,34 @@
                 });
             });
         });
+
+        function deleteUser(element) {
+            const userId = element.getAttribute('data-user-id');
+            const csrfToken = '{{ csrf_token }}';  // Assurez-vous que la balise CSRF est incluse dans le template
+        
+            if (confirm('Are you sure you want to delete this user?')) {
+                fetch(`{% url 'delete-user' 0 %}`.replace('0', userId), {  // Remplacez 0 par l'ID de l'utilisateur
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,  // Inclure le token CSRF
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Actualiser la page pour mettre à jour la liste
+                        window.location.reload();
+                    } else {
+                        alert('Failed to delete user.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        }            
     </script>     
 
 {% endblock content %}
