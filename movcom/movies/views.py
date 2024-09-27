@@ -74,7 +74,7 @@ def genre_create(request):
     return render(request, 'genres/genre_form.html', {'form': form})
 
 def genre_list(request):
-    genres = Genre.objects.all()
+    genres = Genre.objects.all().order_by('id')
     paginator = Paginator(genres, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
