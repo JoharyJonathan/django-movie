@@ -8,6 +8,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.hashers import make_password
 import os
 import pandas as pd
+from movies.models import WatchHistory
 
 # Create your views here.
 def user_list(request):
@@ -95,3 +96,19 @@ def export_users_to_excel(request):
     df.to_excel(response, index=False)
     
     return response
+
+def calendar_history(request):
+    history = WatchHistory.objects.select_related('user', 'movie').all()
+    
+    events = []
+    for record in history:
+        events.append({
+            'title': f"{record.user.username} watched {record.movie.title}",
+            'start': record.watched_at.isoformat(),
+            'color': '#FF5733',
+        })
+        
+    return JsonResponse(events, safe=False)
+
+def calendar_view(request):
+    return render(request, 'admins/calendars.html')
