@@ -150,11 +150,21 @@ def movie_create(request):
 
 def movie_list(request):
     movies = Movie.objects.all().order_by('id')
-    paginator = Paginator(movies, 7)
+    paginator = Paginator(movies, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
     return render(request, 'movies/movie_list.html', {'movies': movies, 'page_obj': page_obj})
+
+def search_movie(request):
+    query = request.GET.get('query', None)
+    if query:
+        # Effectue la recherche dans les films
+        movies = Movie.objects.filter(title__icontains=query)
+        results = [{'title': movie.title} for movie in movies]
+        return JsonResponse({'movies': results}, safe=False)
+    else:
+        return JsonResponse({'movies': []}, safe=False)    
 
 def movie_update(request, pk):
     movie = get_object_or_404(Movie, pk=pk)

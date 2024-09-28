@@ -13,8 +13,40 @@
                         <div class="col-sm-4">
                             <div class="search-box">
                                 <i class="material-icons">&#xE8B6;</i>
-                                <input type="text" class="form-control" placeholder="Search&hellip;">
+                                <input type="text" id="search-input" class="form-control" placeholder="Search&hellip;">
+                                <!-- Div qui contiendra les résultats de recherche -->
+                                <div id="search-results"></div>
                             </div>
+                            <script type="text/javascript">
+                                $(document).ready(function(){
+                                    $("#search-input").on("keyup", function() {
+                                        var query = $(this).val();
+                            
+                                        // Vérifie si la recherche n'est pas vide
+                                        if (query.length > 0) {
+                                            $.ajax({
+                                                url: '{% url "search_movie" %}',  // Utilise le nom de la vue dans les URL
+                                                data: {
+                                                    'query': query
+                                                },
+                                                dataType: 'json',
+                                                success: function (data) {
+                                                    $("#search-results").empty();  // Vide les anciens résultats
+                                                    if (data.movies.length > 0) {
+                                                        $.each(data.movies, function (index, movie) {
+                                                            $("#search-results").append('<p>' + movie.title + '</p>');
+                                                        });
+                                                    } else {
+                                                        $("#search-results").html('<p>No results found</p>');
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            $("#search-results").empty();  // Vide les résultats si la recherche est vide
+                                        }
+                                    });
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
