@@ -97,6 +97,20 @@ def export_users_to_excel(request):
     
     return response
 
+@csrf_exempt
+def change_user_status(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('userId')
+        is_active = request.POST.get('is_active') == 'true'
+        
+        # Update user status
+        user = User.objects.get(id=user_id)
+        user.is_active = is_active
+        user.save()
+        
+        return JsonResponse({'success': True, 'message': 'User status updated successfully !'})
+    return JsonResponse({'success': False, 'message': 'Invalid request.'})
+
 def calendar_history(request):
     history = WatchHistory.objects.select_related('user', 'movie').all()
     

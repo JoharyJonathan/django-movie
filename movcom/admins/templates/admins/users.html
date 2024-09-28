@@ -44,9 +44,15 @@
                                 {% endif %}
                                 <td>{{ user.date_joined|date:"d/m/Y" }}</td>                        
                                 <td>Admin</td>
-                                <td><span class="status text-success">&bull;</span> Active</td>
+                                {% if user.is_active %}
+                                    <td><span class="status text-success">&bull;</span> Active</td>
+                                {% else %}
+                                    <td><span class="status text-warning">&bull;</span> Inactive</td>
+                                {% endif %}
                                 <td>
-                                    <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
+                                    <a href="#" class="settings" title="Change Status" data-toggle="modal" data-target="#changeStatusModal" data-user-id="{{ user.id }}" onclick="setUserId(this);">
+                                        <i class="material-icons">&#xE8B8;</i>
+                                    </a>
                                     <a href="#" class="delete" title="Delete" data-user-id="{{ user.id }}" onclick="deleteUser(this); return false;">
                                         <i class="material-icons">&#xE5C9;</i>
                                     </a>
@@ -137,6 +143,37 @@
         </div>
     </div>
 
+    <!-- The Status Modal -->
+    <div class="modal fade" id="changeStatusModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="changeStatusForm">
+                        <p>Change user status:</p>
+                        <label>
+                            <input type="radio" name="is_active" value="true" required>
+                            Active
+                        </label>
+                        <label>
+                            <input type="radio" name="is_active" value="false" required>
+                            Inactive
+                        </label>
+                        <input type="hidden" id="userId" name="userId">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <!-- Ajax Script for Submitting the Form -->
     <script>
         $(document).ready(function() {
@@ -193,7 +230,39 @@
                     console.error('Error:', error);
                 });
             }
-        }            
+        }
+        
+        function setUserId(element) {
+            const userId = element.getAttribute('data-user-id');
+            document.getElementById('userId').value = userId; // Mettez l'ID de l'utilisateur dans le champ caché
+        }
+        
+        $(document).ready(function() {
+            $('#changeStatusForm').submit(function(event) {
+                event.preventDefault();
+        
+                var formData = new FormData(this);
+        
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'change-user-status' %}",  // Changez cette URL selon votre endpoint
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload(); // Recharger la page
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(response) {
+                        alert('An error occurred while changing the user status.');
+                    }
+                });
+            });
+        });        
     </script>     
 
 {% endblock content %}
