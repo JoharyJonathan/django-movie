@@ -30,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for movie in movies %}
+                        {% for movie in page_obj %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ movie.title }}</td>
@@ -47,17 +47,55 @@
                     </tbody>
                 </table>
                 <div class="clearfix">
-                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <div class="hint-text">
+                        Showing <b>{{ page_obj.start_index }}</b> to <b>{{ page_obj.end_index }}</b> of <b>{{ page_obj.paginator.count }}</b> entries
+                    </div>
+                
                     <ul class="pagination">
-                        <li class="page-item disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">4</a></li>
-                        <li class="page-item"><a href="#" class="page-link">5</a></li>
-                        <li class="page-item"><a href="#" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
+                        <!-- Lien pour la première page -->
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a href="?page=1" class="page-link"><i class="fa fa-angle-double-left"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.previous_page_number }}" class="page-link"><i class="fa fa-angle-left"></i></a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link"><i class="fa fa-angle-double-left"></i></a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link"><i class="fa fa-angle-left"></i></a>
+                        </li>
+                        {% endif %}
+                
+                        <!-- Lien pour les pages numérotées -->
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <li class="page-item active"><a href="#" class="page-link">{{ num }}</a></li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                
+                        <!-- Lien pour la dernière page -->
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.next_page_number }}" class="page-link"><i class="fa fa-angle-right"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link"><i class="fa fa-angle-double-right"></i></a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link"><i class="fa fa-angle-right"></i></a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link"><i class="fa fa-angle-double-right"></i></a>
+                        </li>
+                        {% endif %}
                     </ul>
-                </div>
+                </div>                
             </div>
         </div>  
     </div>   

@@ -148,10 +148,13 @@ def movie_create(request):
         form = MovieForm()
     return render(request, 'movies/movie_form.html', {'form': form})
 
-
 def movie_list(request):
-    movies = Movie.objects.all()
-    return render(request, 'movies/movie_list.html', {'movies': movies})
+    movies = Movie.objects.all().order_by('id')
+    paginator = Paginator(movies, 7)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'movies/movie_list.html', {'movies': movies, 'page_obj': page_obj})
 
 def movie_update(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
