@@ -9,6 +9,7 @@ from django.contrib.auth.hashers import make_password
 import os
 import pandas as pd
 from movies.models import WatchHistory
+from comments.models import Comment
 
 # Create your views here.
 def user_list(request):
@@ -182,3 +183,12 @@ def calendar_history(request):
 
 def calendar_view(request):
     return render(request, 'admins/calendars.html')
+
+def admin_comments_view(request):
+    comment_list = Comment.objects.select_related('movie', 'user').all()
+    paginator = Paginator(comment_list, 10)
+    
+    page_number = request.GET.get('page')
+    comments = paginator.get_page(page_number)
+    
+    return render(request, 'admins/comments.html', {'comments': comments})

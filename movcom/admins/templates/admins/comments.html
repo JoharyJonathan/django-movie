@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br><br><br>
+    <div class="container">
+        <h2>Comments List</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Movie Name</th>
+                    <th>Comments</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                    <tr>
+                        <td>{{ comment.user.username }}</td>
+                        <td>{{ comment.movie.title }}</td>
+                        <td>{{ comment.content }}</td>
+                        <td>{{ comment.created_at|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">Aucun commentaire trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if comments.has_previous %}
+                <a href="?page=1">&laquo; première</a>
+                <a href="?page={{ comments.previous_page_number }}">précédent</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ comments.number }} de {{ comments.paginator.num_pages }}.
+            </span>
+    
+            {% if comments.has_next %}
+                <a href="?page={{ comments.next_page_number }}">suivant</a>
+                <a href="?page={{ comments.paginator.num_pages }}">dernière &raquo;</a>
+            {% endif %}
+        </span>
+    </div>    
+{% endblock %}
