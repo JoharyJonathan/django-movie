@@ -181,6 +181,45 @@ def calendar_history(request):
         
     return JsonResponse(events, safe=False)
 
+def calendar_comments(request):
+    comments = Comment.objects.select_related('user', 'movie').all()
+    
+    events = []
+    for record in comments:
+        events.append({
+            'title': f"{record.user.username} commented {record.movie.title}",
+            'start': record.created_at.isoformat(),
+            'color': '#039BE5',
+        })
+        
+    return JsonResponse(events, safe=False)
+
+def combined_calendar_events(request):
+    # Obtenir l'historique
+    history = WatchHistory.objects.select_related('user', 'movie').all()
+    events = []
+
+    # Ajouter les événements d'historique
+    for record in history:
+        events.append({
+            'title': f"{record.user.username} watched {record.movie.title}",
+            'start': record.watched_at.isoformat(),
+            'color': '#FF5733',
+        })
+        
+    # Obtenir les commentaires
+    comments = Comment.objects.select_related('user', 'movie').all()
+
+    # Ajouter les événements de commentaires
+    for record in comments:
+        events.append({
+            'title': f"{record.user.username} commented on {record.movie.title}",
+            'start': record.created_at.isoformat(),
+            'color': '#039BE5',
+        })
+        
+    return JsonResponse(events, safe=False)
+
 def calendar_view(request):
     return render(request, 'admins/calendars.html')
 

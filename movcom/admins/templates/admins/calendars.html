@@ -14,7 +14,7 @@
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
-                events: "{% url 'calendar-history' %}",
+                events: "{% url 'calendar-events' %}",
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
