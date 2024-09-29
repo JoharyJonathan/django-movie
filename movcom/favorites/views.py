@@ -18,7 +18,7 @@ def toggle_favorite(request, movie_id):
 
 @login_required
 def favorite_movies(request):
-    favoris = Favorite.objects.filter(user=request.user).select_related('movie')
+    favoris = Favorite.objects.filter(user=request.user).select_related('movie').order_by('id')
     nb_favoris = favoris.count()
     
     # Pagination
