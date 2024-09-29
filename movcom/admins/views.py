@@ -73,6 +73,62 @@ def add_user(request):
 
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
+@csrf_exempt
+def edit_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        lastname = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        image = request.FILES.get('image')
+
+        # Check if username is already taken
+        if User.objects.filter(username=username).exclude(id=user.id).exists():
+            return JsonResponse({'success': False, 'message': 'Username already exists !'})
+
+        # Manage Image
+        if image:
+            # Check image extension
+            allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+            image_extension = os.path.splitext(image.name)[1]  # extraction de l'extension
+            if image_extension.lower() not in allowed_extensions:
+                return JsonResponse({'success': False, 'message': 'Invalid image format. Please upload a JPEG, PNG, or GIF image.'})
+
+            new_image_name = f"{username}_{image.name}"
+
+            # Save File
+            media_path = os.path.join('profile_images')
+            full_media_path = os.path.join(settings.MEDIA_ROOT, media_path)
+
+            # check if folder exists
+            if not os.path.exists(full_media_path):
+                os.makedirs(full_media_path)
+
+            # Save image
+            fs = FileSystemStorage(location=full_media_path)
+            filename = fs.save(new_image_name, image)
+
+            # Create file_path
+            uploaded_file_url = os.path.join(media_path, new_image_name)
+            user.first_name = uploaded_file_url
+
+        # Update profile informations
+        user.username = username
+        user.last_name = lastname
+        user.email = email
+
+        # Change password if provided
+        if password:
+            user.password = make_password(password)  # Crypt password
+
+        user.save()
+
+        return JsonResponse({'success': True, 'message': 'User profile updated Successfully !'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
 def delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
     
