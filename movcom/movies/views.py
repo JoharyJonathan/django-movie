@@ -217,7 +217,7 @@ def movie_delete(request, pk):
     return render(request, 'movies/movie_confirm_delete.html', {'movie': movie})
 
 def movie(request):
-    movies = Movie.objects.all()
+    movies = Movie.objects.all().order_by('-release_year')
     
     # paginate the view, 6 per pages
     paginator = Paginator(movies, 6)
@@ -273,7 +273,7 @@ def genre(request):
     return render(request, 'genres/genres.html', {'genre': genres, 'genres_count': paginator.count, 'paginator': paginator, 'search_query': search_query})
 
 def actors(request):
-    actors_list = Actor.objects.all()
+    actors_list = Actor.objects.all().order_by('id')
     search_query = request.GET.get('search', '')
     paginator = Paginator(actors_list, 10)
     

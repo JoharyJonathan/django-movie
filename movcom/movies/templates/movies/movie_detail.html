@@ -22,6 +22,9 @@
                     <figure class="mb-4"><img class="img-fluid rounded" src="{{ movie.poster.url }}" alt="..." /></figure>
                     <!-- Post content-->
                     <section class="mb-5">
+                        <div>
+                            <h2>Rating: {{ movie.rating }} / 5</h2>
+                        </div>                        
                         <h2 class="fw-bolder mb-4 mt-5">Directed by :</h2>
                         <p class="fs-5 mb-4">{{ movie.director }}</p>
                         <h2 class="fw-bolder mb-4 mt-5">Description</h2>
