@@ -7,13 +7,13 @@ from .models import Rating
 def add_rating(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
     user = request.user
-    user_rating = int(request.POST.get('rating'))
+    user_rating = int(request.POST.get('selected_rating'))
     
     # Check if the user has already rate this movie
     rating_obj, created = Rating.objects.update_or_create(
         user=user,
         movie=movie,
-        defaults={'rating', user_rating}
+        defaults={'rating': user_rating}
     )
     
     # re-calculate the average of the rating
@@ -21,4 +21,4 @@ def add_rating(request, movie_id):
     movie.rating = new_avg_rating or 0
     movie.save()
     
-    return redirect('movie_detail', movie_id=movie.id)
+    return redirect('movie-detail', id=movie.id)
