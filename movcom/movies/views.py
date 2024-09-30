@@ -275,6 +275,12 @@ def genre(request):
 def actors(request):
     actors_list = Actor.objects.all().order_by('id')
     search_query = request.GET.get('search', '')
+
+    if search_query:
+        actors_list = actors_list.filter(
+            Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
+        )
+
     paginator = Paginator(actors_list, 10)
     
     page = request.GET.get('page')
@@ -285,7 +291,11 @@ def actors(request):
     except EmptyPage:
         actors = paginator.page(paginator.num_pages)
         
-    return render(request, 'actors/actors.html', {'actor': actors, 'actors_count': paginator.count, 'search_query': search_query})
+    return render(request, 'actors/actors.html', {
+        'actors': actors,  # Correction ici pour l'appel du contexte
+        'actors_count': paginator.count,
+        'search_query': search_query,
+    })
 
 def movie_by_actor(request, actor_id):
     actor = get_object_or_404(Actor, id=actor_id)
