@@ -168,3 +168,31 @@ import os
 # Add media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Celery config
+
+# Broker utilisé par Celery (ici, on utilise Redis)
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+# Stockage des résultats des tâches
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Option pour ignorer les résultats si tu n'en as pas besoin
+CELERY_IGNORE_RESULT = True
+
+# Configuration des tâches périodiques (si nécessaire)
+CELERY_BEAT_SCHEDULE = {
+    'train-kmeans-every-day': {
+        'task': 'recommendations.tasks.train_kmeans',
+        'schedule': 3600.0,  # Entraînement chaque heure
+    },
+}
+
+# Charger les tâches des applications automatiquement
+CELERY_IMPORTS = ('recommendations.tasks',)
+
+# Configuration du contenu accepté et de la sérialisation des tâches
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

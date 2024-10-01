@@ -29,6 +29,7 @@ urlpatterns = [
     path('ratings/', include('ratings.urls')),
     path('comments/', include('comments.urls')),
     path('favorites/', include('favorites.urls')),
+    path('recommendations/', include('recommendations.urls')),
     path('', home_view, name='home'),
 ]
 

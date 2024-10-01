@@ -2,8 +2,10 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.urls import reverse
 from .models import Favorite
 from movies.models import Movie
+from recommendations.views import add_movie_interaction
 
 # Create your views here.
 @login_required
@@ -34,11 +36,6 @@ def favorite_movies(request):
     
     return render(request, 'movies/favorites.html', context)
 
-from django.urls import reverse
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from .models import Favorite
-
 @login_required
 def search_movies(request):
     query = request.GET.get('query', '')
@@ -61,3 +58,11 @@ def search_movies(request):
     ]
     
     return JsonResponse({'movies': results})
+
+def has_liked_movie(user, movie):
+    liked = Favorite.objects.filter(user=user, movie=movie).exists()
+    
+    if liked:
+        add_movie_interaction(user, movie)
+    
+    return liked

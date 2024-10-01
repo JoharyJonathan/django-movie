@@ -9,6 +9,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from favorites.models import Favorite
+from recommendations.views import add_movie_interaction
 
 # Create your views here.
 def actor_create(request):
@@ -230,13 +231,16 @@ def movie(request):
 def movie_detail(request, id):
     movie = get_object_or_404(Movie, pk=id)
     genres = Genre.objects.all()
-    comments = movie.comments.filter(parent__isnull=True)
-    
+    comments = movie.comments.filter(parent__isnull=True)    
+
     user_favorite = Favorite.objects.filter(user=request.user, movie=movie).exists()
     
     # Update history
     if request.user.is_authenticated:
         update_watch_history(request.user, movie.id)
+        
+        # Add new entry in UserMovieInteraction
+        add_movie_interaction(request.user, movie)
     
     return render(request, 'movies/movie_detail.html', {'movie': movie, 'genres': genres ,'comments': comments, 'user_favorite': user_favorite})
 
@@ -340,3 +344,11 @@ def delete_watch_history(request, movie_id):
     history_item.delete()
     
     return redirect('watch_history')
+
+def has_watched_movie(user, movie):
+    watched = WatchHistory.objects.filter(user=user, movie=movie)
+    
+    if watched:
+        add_movie_interaction(user, movie)
+    
+    return watched
