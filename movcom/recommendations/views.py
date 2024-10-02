@@ -26,7 +26,7 @@ def recommend_movies(request):
     similar_users = UserCluster.objects.filter(cluster=user_cluster.cluster).exclude(user=request.user)
     
     # Recommander des films regardés par les autres utilisateurs du même cluster
-    recommended_movies = Movie.objects.filter(usermovieinteraction__user__in=[u.user for u in similar_users]).distinct()
+    recommended_movies = Movie.objects.filter(usermovieinteraction__user__in=[u.user for u in similar_users]).distinct().order_by('id')
     
     paginator = Paginator(recommended_movies, 6)
     page_number = request.GET.get('page')

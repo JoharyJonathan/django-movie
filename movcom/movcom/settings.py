@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'recommendations',
     'ratings',
     'comments',
+    'feedback',
     'favorites',
 ]
 

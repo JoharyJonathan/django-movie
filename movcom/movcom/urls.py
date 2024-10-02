@@ -30,6 +30,7 @@ urlpatterns = [
     path('comments/', include('comments.urls')),
     path('favorites/', include('favorites.urls')),
     path('recommendations/', include('recommendations.urls')),
+    path('feed/', include('feedback.urls')),
     path('', home_view, name='home'),
 ]
 

@@ -1,0 +1,36 @@
+.modal-dialog{
+    height: 50%;
+    width: 50%;
+    margin:auto;
+}
+
+
+.modal-header{
+    color: white;
+    background-color: #007bff;
+}
+
+textarea{ border: none; 
+    box-shadow: none !important;
+    -webkit-appearance:none;
+    outline:0px !important;
+}
+
+.openmodal{
+    margin-left: 35%;
+    width: 25%;
+    margin-top: 25%;
+}
+
+.icon1{
+   color: #007bff;
+
+}
+
+a{
+    margin: auto;
+}
+
+input{
+    color: #007bff;
+}
