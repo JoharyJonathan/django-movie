@@ -31,16 +31,22 @@
                                 <p class="m-b-10 f-w-600">Email</p>
                                 <h6 class="text-muted f-w-400">{{ user.email }}</h6>
                             </div>
-                            <div class="col-sm-6">
+                            <!--<div class="col-sm-6">
                                 <p class="m-b-10 f-w-600">Phone</p>
                                 <h6 class="text-muted f-w-400">98979989898</h6>
-                            </div>
+                            </div>-->
                         </div>
                         <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">History</h6>
                         <div class="row">
                             <div class="col-sm-6">
                                 <p class="m-b-10 f-w-600">Recent</p>
-                                <h6 class="text-muted f-w-400">Django</h6>
+                                <h6 class="text-muted f-w-400">
+                                    {% if last_watched_movie %}
+                                        {{ last_watched_movie.title }}
+                                    {% else %}
+                                        No recent movies watched
+                                    {% endif %}
+                                </h6>
                             </div>
                             <div class="col-sm-6">
                                 <p class="m-b-10 f-w-600">Most Viewed</p>

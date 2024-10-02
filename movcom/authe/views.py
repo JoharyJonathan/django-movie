@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import AdminSignUpForm, ProfileUpdateForm
+from movies.models import WatchHistory
 from django.conf import settings
 from admins.utils import create_admin
 
@@ -63,7 +64,10 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     user = request.user
-    return render(request, 'authenticate/profile.html', {'user': user})
+    
+    last_watched_movie = WatchHistory.objects.filter(user=user).first()
+    
+    return render(request, 'authenticate/profile.html', {'user': user, 'last_watched_movie': last_watched_movie.movie if last_watched_movie else None})
 
 @login_required
 def update_profile(request):
