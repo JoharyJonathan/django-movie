@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from favorites.models import Favorite
 from recommendations.views import add_movie_interaction
+from recommendations.models import UserCluster
 
 # Create your views here.
 def actor_create(request):
@@ -218,15 +219,30 @@ def movie_delete(request, pk):
     return render(request, 'movies/movie_confirm_delete.html', {'movie': movie})
 
 def movie(request):
+    # Récupérer tous les films triés par l'année de sortie (les plus récents en premier)
     movies = Movie.objects.all().order_by('-release_year')
     
-    # paginate the view, 6 per pages
+    # Paginer les films récents, 6 films par page
     paginator = Paginator(movies, 6)
-    
     page_number = request.GET.get('page')
     movies = paginator.get_page(page_number)
+
+    # Récupérer les recommandations pour l'utilisateur connecté
+    user_cluster = UserCluster.objects.get(user=request.user)
+    similar_users = UserCluster.objects.filter(cluster=user_cluster.cluster).exclude(user=request.user)
     
-    return render(request, 'movies/movie.html', {'movies': movies})
+    # Recommander des films basés sur les interactions des utilisateurs similaires
+    recommended_movies = Movie.objects.filter(
+        usermovieinteraction__user__in=[u.user for u in similar_users]
+    ).distinct()
+
+    # Limiter les recommandations à 3 films
+    recommended_movies = recommended_movies[:3]
+
+    return render(request, 'movies/movie.html', {
+        'movies': movies,
+        'recommended_movies': recommended_movies,
+    })
 
 def movie_detail(request, id):
     movie = get_object_or_404(Movie, pk=id)
