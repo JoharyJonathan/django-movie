@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Count
 from .forms import AdminSignUpForm, ProfileUpdateForm
 from movies.models import WatchHistory
+from recommendations.models import UserMovieInteraction
+from movies.models import Movie
 from django.conf import settings
 from admins.utils import create_admin
 
@@ -67,7 +70,16 @@ def profile_view(request):
     
     last_watched_movie = WatchHistory.objects.filter(user=user).first()
     
-    return render(request, 'authenticate/profile.html', {'user': user, 'last_watched_movie': last_watched_movie.movie if last_watched_movie else None})
+    most_viewed_movie = UserMovieInteraction.objects.filter(user=user) \
+        .values('movie') \
+        .annotate(view_count=Count('movie')) \
+        .order_by('-view_count') \
+        .first()
+        
+    if most_viewed_movie:
+        most_viewed_movie = Movie.objects.get(id=most_viewed_movie['movie'])
+    
+    return render(request, 'authenticate/profile.html', {'user': user, 'last_watched_movie': last_watched_movie.movie if last_watched_movie else None, 'most_viewed_movie': most_viewed_movie})
 
 @login_required
 def update_profile(request):
