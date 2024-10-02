@@ -8,8 +8,9 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.hashers import make_password
 import os
 import pandas as pd
-from movies.models import WatchHistory
+from movies.models import WatchHistory, Movie
 from comments.models import Comment
+from recommendations.models import UserMovieInteraction
 
 # Create your views here.
 def user_list(request):
@@ -231,3 +232,11 @@ def admin_comments_view(request):
     comments = paginator.get_page(page_number)
     
     return render(request, 'admins/comments.html', {'comments': comments})
+
+def traffic(request):
+    users = User.objects.all().count()
+    comments = Comment.objects.all().count()
+    movies = Movie.objects.all().count()
+    visits = UserMovieInteraction.objects.all().count()
+    
+    return render(request, 'admins/web-traffic.html', {'users': users, 'comments': comments, 'movies': movies, 'visits': visits})
