@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.core.paginator import Paginator
 from .models import UserCluster, UserMovieInteraction
 from movies.models import Movie
 from favorites.models import Favorite
@@ -27,4 +28,8 @@ def recommend_movies(request):
     # Recommander des films regardés par les autres utilisateurs du même cluster
     recommended_movies = Movie.objects.filter(usermovieinteraction__user__in=[u.user for u in similar_users]).distinct()
     
-    return render(request, 'recommendations.html', {'recommended_movies': recommended_movies})
+    paginator = Paginator(recommended_movies, 6)
+    page_number = request.GET.get('page')
+    recommended_movies = paginator.get_page(page_number)
+    
+    return render(request, 'recommendations/recommendations.html', {'recommended_movies': recommended_movies})
