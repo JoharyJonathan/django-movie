@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import user_list, user_detail, add_user, delete_user, export_users_to_excel, calendar_history, calendar_comments, calendar_view, change_user_status, edit_user, admin_comments_view, combined_calendar_events, traffic
+from .views import user_list, user_detail, add_user, delete_user, export_users_to_excel, calendar_history, calendar_comments, calendar_view, change_user_status, edit_user, admin_comments_view, combined_calendar_events, traffic, feedback
 
 urlpatterns = [
     path('users/', user_list, name='user-list'),
@@ -15,4 +15,5 @@ urlpatterns = [
     path('calendars/', calendar_view, name='calendars'),
     path('comments/', admin_comments_view, name='admin-comments'),
     path('traffic/', traffic, name='traffic'),
+    path('feed/back/', feedback, name='feed_back'),
 ]

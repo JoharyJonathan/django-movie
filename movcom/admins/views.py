@@ -11,6 +11,7 @@ import pandas as pd
 from movies.models import WatchHistory, Movie
 from comments.models import Comment
 from recommendations.models import UserMovieInteraction
+from feedback.models import Feedback
 
 # Create your views here.
 def user_list(request):
@@ -240,3 +241,11 @@ def traffic(request):
     visits = UserMovieInteraction.objects.all().count()
     
     return render(request, 'admins/web-traffic.html', {'users': users, 'comments': comments, 'movies': movies, 'visits': visits})
+
+def feedback(request):
+    feeds = Feedback.objects.all()
+    paginator = Paginator(feeds, 10)
+    page_number = request.GET.get('page')
+    feeds = paginator.get_page(page_number)
+    
+    return render(request, 'admins/feedback.html', {'feeds': feeds})

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br><br><br>
+    <div class="container">
+        <h2>Feed-Back List</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Rating</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feed in feeds %}
+                    <tr>
+                        <td>{{ feed.user.username }}</td>
+                        <td>{{ feed.rating }}</td>
+                        <td>{{ feed.content }}</td>
+                        <td>{{ feed.created_at|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if feeds.has_previous %}
+                <a href="?page=1">&laquo; première</a>
+                <a href="?page={{ comments.previous_page_number }}">précédent</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ feeds.number }} de {{ feeds.paginator.num_pages }}.
+            </span>
+    
+            {% if feeds.has_next %}
+                <a href="?page={{ feeds.next_page_number }}">suivant</a>
+                <a href="?page={{ feeds.paginator.num_pages }}">dernière &raquo;</a>
+            {% endif %}
+        </span>
+    </div>    
+{% endblock %}
