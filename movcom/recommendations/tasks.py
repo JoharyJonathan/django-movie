@@ -6,6 +6,8 @@ import pandas as pd
 
 @shared_task
 def train_kmeans():
+    print('Start kmeans')
+    
     # Extraire les données des interactions utilisateur
     interactions = UserMovieInteraction.objects.all()
     data = []

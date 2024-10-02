@@ -9,7 +9,7 @@
     <div>
         {% for recom in recommended_movies %}
             <p>{{ recom.title }}</p>
-        {% else %}
+        {% empty %}
             <p>No Recommandations</p>
         {% endfor %}
     </div>

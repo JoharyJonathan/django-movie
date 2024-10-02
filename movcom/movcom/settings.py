@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_celery_beat',
+    'django_celery_results',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -175,18 +177,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 # Stockage des résultats des tâches
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'django-db'
 
 # Option pour ignorer les résultats si tu n'en as pas besoin
-CELERY_IGNORE_RESULT = True
-
-# Configuration des tâches périodiques (si nécessaire)
-CELERY_BEAT_SCHEDULE = {
-    'train-kmeans-every-day': {
-        'task': 'recommendations.tasks.train_kmeans',
-        'schedule': 3600.0,  # Entraînement chaque heure
-    },
-}
+CELERY_IGNORE_RESULT = False
 
 # Charger les tâches des applications automatiquement
 CELERY_IMPORTS = ('recommendations.tasks',)
